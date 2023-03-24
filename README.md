@@ -40,6 +40,26 @@ Sample from the output of the select statment:
 
 
 ```sql
+
+--Project (create seq, trg pairs on all tables in the schema to auto create primary key)
+
+
+set serveroutput on size 1000000
+
+declare
+max_n number(30) ;
+
+-- tables cursor
+cursor tables_cursor is 
+                SELECT a.OBJECT_NAME as TABLE_NAME, nvl(min(c.column_name),0) as pk_column
+                      FROM ALL_OBJECTS a , all_cons_columns c
+                      WHERE a.OBJECT_NAME = c.TABLE_NAME 
+                           and a.OWNER = 'HR'
+                           and a.OBJECT_TYPE = 'TABLE'
+                           and c.constraint_name in (SELECT constraint_name FROM all_constraints WHERE CONSTRAINT_TYPE = 'P')
+                            group by(a.OBJECT_NAME) -- if there is a composite key choose only one
+                            having min(c.column_name) NOT IN (SELECT column_name FROM  user_tab_columns WHERE data_type <> 'NUMBER'); 
+
 -- sequence names cursor
 cursor sequence_name_cursor is 
     select sequence_name from user_sequences;
@@ -73,7 +93,28 @@ Sample from the output of the select statment:
 ## Step:2 -  drop all sequences -  Create sequence for each table - Create Trigger
 
 ```sql
+--Project (create seq, trg pairs on all tables in the schema to auto create primary key)
 
+
+set serveroutput on size 1000000
+
+declare
+max_n number(30) ;
+
+-- tables cursor
+cursor tables_cursor is 
+                SELECT a.OBJECT_NAME as TABLE_NAME, nvl(min(c.column_name),0) as pk_column
+                      FROM ALL_OBJECTS a , all_cons_columns c
+                      WHERE a.OBJECT_NAME = c.TABLE_NAME 
+                           and a.OWNER = 'HR'
+                           and a.OBJECT_TYPE = 'TABLE'
+                           and c.constraint_name in (SELECT constraint_name FROM all_constraints WHERE CONSTRAINT_TYPE = 'P')
+                            group by(a.OBJECT_NAME) -- if there is a composite key choose only one
+                            having min(c.column_name) NOT IN (SELECT column_name FROM  user_tab_columns WHERE data_type <> 'NUMBER'); 
+
+-- sequence names cursor
+cursor sequence_name_cursor is 
+    select sequence_name from user_sequences;
     
 Begin
 
@@ -97,6 +138,29 @@ Begin
 ## Step:3 -  Create sequence for each table
 
 ```sql
+
+--Project (create seq, trg pairs on all tables in the schema to auto create primary key)
+
+
+set serveroutput on size 1000000
+
+declare
+max_n number(30) ;
+
+-- tables cursor
+cursor tables_cursor is 
+                SELECT a.OBJECT_NAME as TABLE_NAME, nvl(min(c.column_name),0) as pk_column
+                      FROM ALL_OBJECTS a , all_cons_columns c
+                      WHERE a.OBJECT_NAME = c.TABLE_NAME 
+                           and a.OWNER = 'HR'
+                           and a.OBJECT_TYPE = 'TABLE'
+                           and c.constraint_name in (SELECT constraint_name FROM all_constraints WHERE CONSTRAINT_TYPE = 'P')
+                            group by(a.OBJECT_NAME) -- if there is a composite key choose only one
+                            having min(c.column_name) NOT IN (SELECT column_name FROM  user_tab_columns WHERE data_type <> 'NUMBER'); 
+
+-- sequence names cursor
+cursor sequence_name_cursor is 
+    select sequence_name from user_sequences;
 
     
 Begin
@@ -131,6 +195,30 @@ Begin
 ## Step:4 -  Create Trigger
 
 ```sql 
+
+--Project (create seq, trg pairs on all tables in the schema to auto create primary key)
+
+
+set serveroutput on size 1000000
+
+declare
+max_n number(30) ;
+
+-- tables cursor
+cursor tables_cursor is 
+                SELECT a.OBJECT_NAME as TABLE_NAME, nvl(min(c.column_name),0) as pk_column
+                      FROM ALL_OBJECTS a , all_cons_columns c
+                      WHERE a.OBJECT_NAME = c.TABLE_NAME 
+                           and a.OWNER = 'HR'
+                           and a.OBJECT_TYPE = 'TABLE'
+                           and c.constraint_name in (SELECT constraint_name FROM all_constraints WHERE CONSTRAINT_TYPE = 'P')
+                            group by(a.OBJECT_NAME) -- if there is a composite key choose only one
+                            having min(c.column_name) NOT IN (SELECT column_name FROM  user_tab_columns WHERE data_type <> 'NUMBER'); 
+
+-- sequence names cursor
+cursor sequence_name_cursor is 
+    select sequence_name from user_sequences;
+
 
 Begin
 
